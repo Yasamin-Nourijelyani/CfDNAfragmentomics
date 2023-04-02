@@ -1,0 +1,34 @@
+Package: CfDNAfragmentomics
+Type: Package
+Title: Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping
+Version: 0.1.0
+Authors@R: person("Yasamin", "Nouri Jelyani", 
+                  email = "yasamin.nourijelyani@mail.utoronto.ca", 
+                  role = c("aut", "cre"))
+Maintainer: The package maintainer <yasamin.nourijelyani@mail.utoronto.ca>
+Description: Perform analysis for nucleosome ratios comparing patient 
+              and control cfDNA fragment lengths as a cncer biomarker. 
+              Also, plot cfDNA length densities to visually compare control 
+              and patient data. Moreover, perform coverage analysis to detect
+              TFBS and cancer subtyping.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: R (>= 3.1.0)
+Imports:
+    dplyr,
+    ggplot2,
+    gridExtra,
+    magrittr,
+    rlang,
+    shiny,
+    shinyalert,
+    stats
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+Config/testthat/edition: 3
+VignetteBuilder: knitr
