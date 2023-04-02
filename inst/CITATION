@@ -1,0 +1,12 @@
+citHeader("To cite CfDNAfragmentomics in publications use:")
+
+citEntry(
+  entry    = "Unpublished",
+  title    = "Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping",
+  author   = "Yasamin Nouri Jelyani",
+  note     = "Unpublished",
+  year     = "2022",
+  textVersion = paste("Nouri Jelyani, Y. (2022) CfDNAfragmentomics:Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping, Unpublished. URL https://github.com/Yasamin-Nourijelyani/CfDNAfragmentomics."
+
+  )
+)
