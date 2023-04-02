@@ -1,0 +1,275 @@
+---
+title: "Introduction_CfDNAfragmentomics"
+author: "Yasamin Nouri Jelyani"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction_CfDNAfragmentomics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CfDNAfragmentomics)
+```
+
+
+```{r, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center", 
+               out.width = "90%",
+               fig.width = 6, fig.height = 5.5,
+               dev.args=list(pointsize=10),
+               par = TRUE, # needed for setting hook 
+               collapse = TRUE, # collapse input & ouput code in chunks
+               warning = FALSE)
+
+knit_hooks$set(par = function(before, options, envir)
+  { if(before && options$fig.show != "none") 
+       par(family = "sans", mar=c(4.1,4.1,1.1,1.1), mgp=c(3,1,0), tcl=-0.5)
+})
+set.seed(1) # for exact reproducibility
+```
+       
+## Introduction
+
+Early detection and monitoring of cancer have been demonstrated to be crucial in 
+the long-term survival of patients (1). Numerous studies have shown that cfDNA (cell-free DNA) can be used to detect cancer and determine the cancer subtype using blood 
+samples from the patient (2). ctDNA (circulating tumour DNA) is a subset of cfDNA
+present in the blood sample of individuals living with cancer. Certain biomarkers such as 
+the length of the DNA fragment, methylation, and DNA modifications exist that allow 
+scientists to detect ctDNA from the pool of cfDNA and determine its cell of origin. One 
+of the most prominent biomarkers discovered in the paper by Katsman et. al. is the higher 
+ratio of short mono-nucleosome and di-nucleosome cfDNA as compared to normal 
+cfDNA in cancer patients (5). The objective of cfDNAfragmentomics R package is to
+analyse sequenced data from file inputs and find their nucleosome ratios and 
+fragmentation patterns. Using this analysed data, graphs can be generated for 
+visualization, and statistical tests can be performed to determine if the sample cfDNA 
+analysed is cancerous. Hence, this package is purposed to help with the 
+detection of potentially cancerous cfDNA.
+
+
+
+
+
+See `help(package = "CfDNAfragmentomics")` for further details and references provided by `citation("CfDNAfragmentomics")`. To download **CfDNAfragmentomics**, use the following commands:
+
+``` r
+require("devtools")
+devtools::install_github("Yasamin-Nourijelyani/CfDNAfragmentomics", build_vignettes = TRUE)
+library("CfDNAfragmentomics")
+```
+To list all functions available in the package:
+``` r
+ls("package:CfDNAfragmentomics")
+```
+
+<br>
+
+## Details
+
+The biological data analysed by CfDNAfragmentomics is cfDNA (cell-free DNA) which 
+are short DNA fragments that have entered the blood due to cell apoptosis or necrosis. 
+This DNA can have variable lengths in the range of 150-400 base pairs (3). These DNA 
+fragments are sequenced using Illumina Sequencing or Oxford Nanopore Technology.
+The DNA sequences are available in bed or txt files as inputs to the CfDNAfragmentomics 
+package.
+
+
+In the research papers by Doebly et. al. and Katsman et. al. where they analysed mono-nucleosome and di-nucleosome ratios, they did not produce an R package and the analyses were done in 
+python. CfDNAfragmentomics is a novel tool since it analyses and plots the nucleosome 
+patterns in the cfDNA from inputted sequencing data. Also, this analysis is provided for 
+use in research as a package which scientists can run their samples to detect cancer. 
+
+- Analysis function:
+*nucleosomeRatio*: 
+Fragmentation sizes of cfDNA molecules are potential cancer biomarkers (4).
+Hence, to find if a patient data file contains cancer information,
+it can be compared with a control dataset with known healthy cfDNA fragments.
+The Wilcoxon rank sum test, also known as the Mann-Whitney U test, is a non-parametric test used to determine  significance of the difference in fragment size of the control and patient cfDNA lengths to determine if the patient data contains the cancer biomarker. Here, we are comparing two independent samples, which are the population of healthy control cfDNA data and population of patient cfDNA data, and we are making inference about the state of being cancer positive or negative of the population of cfDNA molecules in the patient as being potentially cancer positive or negative. Both control and patient data inputted to the functions are assumed to be reads for the specific loci corresponding to the cancer type of interest. Hence, both the control  and patient data are required in the analysis to ensure the loci being analysed are corresponding to the specific cancer type of interest. This function takes as input cfDNA read dataframes from patient and controls, which can be read from .bed or .txt files. This function also takes as input, p-values for the U-test analysis of mononucleosomes and dinucleosomes.The function returns a list of outputs. 
+This list contains a real number: ttest_mono_pvalue, a real number: ttest_di_pvalue, 
+and a boolean value: cancerous.
+ttest_mono_pvalue is the p-value calculated for the difference in mononucleosome
+lengths between patient and controls, ttest_di_pvalue is the p-value calculated for the difference in dinucleosome lengths, and if the patient input files shows significant shorter
+mononucleosome and dinucleosome sizes compared to the control with respect to the
+inputted p-values that are considered significant, cancerous will be TRUE.
+ and cancerous will be FALSE otherwise. Note that even if the p-values show significance,
+ if the patient cfDNA lengths are not shorter, then the patient is not considered as being cancerous.
+
+
+- Plotting function:
+*nucleosomeDensityPlot*: 
+A visualization function that generates a density plot showing
+nucleosome fragment lengths for control and patient data to visually
+compare the mono-nucleosome and di-nucleosome fragment length densities. This function takes as input cfDNA read dataframes from patient and controls, which can be read from .bed or .txt files.
+
+Assumptions:\
+
+a. The sequenced data that is inputted to the shiny app are in the form of BED or txt files so 
+that they can be parsed and analysed. Files do not contain a header. \
+
+b. The input data to the functions are a dataframe for the a control and patient data with at 
+least 3 columns: first column is a string representing the chromosome number for
+the cfDNA for instance: "chr1", the second column includes integer values 
+indicating the start location of the read and third column includes integer 
+values indicating end location of the read. This is also the format for the 
+bed and txt files inputted to the shiny app.\
+
+c. The length of the fragments to analyse is within the range of 100-400 base pairs to 
+avoid using a large memory space and to ensure only short cfDNA fragments are 
+analysed\
+
+d. The Wilcoxon rank sum test, also known as the Mann-Whitney U test, is a non-parametric test used to determine  significance of the difference in fragment size of the control and patient cfDNA lengths to determine if the patient data contains the cancer biomarker. Here, we are comparing two independent samples, which are the population of healthy control cfDNA data and population of patient cfDNA data, and we are making inference about the state of being cancer positive or negative of the population of cfDNA molecules in the patient as being potentially cancer positive or negative. Both control and patient data inputted to the functions are assumed to be reads for the specific loci corresponding to the cancer type of interest. Hence, both the control  and patient data are required in the analysis to ensure the loci being analysed are corresponding to the specific cancer type of interest.
+
+e. It is also assumed that the data is real human data and contains
+both mono-nucleosome and di-nucleosome length data, sequenced from Illumina and
+Oxford Nanopore Technology sequencers to ensure data 
+viability.\
+
+f. Both control and patient
+data inputted to the functions are assumed to be reads for the specific loci
+corresponding to the cancer type of interest. Hence, both the control
+and patient data are required in the analysis to ensure the loci
+being analysed are corresponding to the specific cancer type of interest.\
+
+
+
+
+## Applications
+To get more information about *nucleosomeRatio* function, the help documentation will be helpful:
+```{r, }
+library(CfDNAfragmentomics)
+?CfDNAfragmentomics::nucleosomeRatio
+``` 
+
+Here the function *nucleosomeRatio* is a function that calculates the U-test of the lengths in patient and control data to determine their significance of difference. Also, this function determines if the lengths in the patient data are significantly shorter than the control data to determine if the patient has the cancer biomarker. To calculate the U-test, the function should be provided with controls_bed which is the dataframe generated from the .bed or .txt files for control data, and sample_bed which is the dataframe generated from the .bed or .txt fil of patient cfDNA data, di_nucleosome_p_value which is the p-value for the dinuclesome ratio and mono_nucleosome_p_value the p-value for the mononuclesome ratio such that the data is considered significant. The result of the U-test that is considered significant for di-nucleosome and mon-nucleosome ratios
+can be different, so based on the user's data, these values can be inputted. 
+
+
+As an example, let's use the *p1.bed* dataset which has 1895 observations and a dimensionality of 4, showing chromosome start and end sites for one control individual. Here, assume the di_nucleosome_p_value is 0.3, and mono_nucleosome_p_value is 0.3. The output is saved into the R object *ratio*.
+
+
+```{r, }
+
+controls_bed_file <- system.file("extdata", "p1.bed", package = "CfDNAfragmentomics")
+controls_bed <- read.table(controls_bed_file, header = FALSE, sep="\t",stringsAsFactors=FALSE, quote="")
+
+sample_bed_file <- system.file("extdata", "d1.bed", package = "CfDNAfragmentomics")
+sample_bed <- read.table(sample_bed_file, header = FALSE, sep="\t",stringsAsFactors=FALSE, quote="")
+
+ratio <- nucleosomeRatio(controls_bed = controls_bed, sample_bed = sample_bed, 0.3, 0.3)
+
+
+
+``` 
+
+To access results, see:
+```{r, }
+# To get the class of nucleosomeRatio
+class(ratio)
+
+``` 
+
+Here, nucleosomeRatio is an list object with a logical field called cancerous which when it returns true, it means that the patient cfDNA lengths are significantly shorter than the control data. Hence, this patient data is potentially cancerous. 
+
+```{r, }
+ratio$cancerous
+``` 
+Also, the nucleosomeRatio return list object has fields called ttest_mono_pvalue and ttest_di_pvalue which are
+the p-values from the U-test analysis for the cfDNA fragment lengths compared between the patient and control
+data. The significance of these values are evaluated based on the p-values that the user had inputted that are considered significant, or 0.05 by default.  
+
+```{r, }
+ratio$ttest_mono_pvalue
+ratio$ttest_di_pvalue
+
+``` 
+
+To visualize the cfDNA fragment length densities, you may use *nucleosomeDensityPlot* function. To read more about *nucleosomeDensityPlot* function, see:
+
+```{r, }
+library(CfDNAfragmentomics)
+?CfDNAfragmentomics::nucleosomeDensityPlot
+``` 
+
+Let's create the plot of the cfDNA length densities. 
+```{r, }
+CfDNAfragmentomics::nucleosomeDensityPlot(controls_bed = controls_bed, sample_bed = sample_bed)
+
+``` 
+
+The plot shows the cfDNA fragment length on the x-axis for patient and control data, and the density of those lengths on the y-axis. Here, it is evident that the patient cfDNA fragment lengths are statistically shorter than the control lengths since the peak for the patient data has higher density at lower lengths. However, note that a p-value of 0.3 was used.
+If, on the other hand a default p-value of 0.05 is used:
+
+```{r, }
+ratio <- nucleosomeRatio(controls_bed = controls_bed, sample_bed = sample_bed)
+
+ratio
+``` 
+
+We can see that the difference in the patient and control cfDNA fragment lengths are no longer significantly different. 
+
+
+## Package References
+
+Nouri Jelyani, Y. (2022) CfDNAfragmentomics:Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping, Unpublished. URL https://github.com/Yasamin-Nourijelyani/CfDNAfragmentomics.
+
+## Other References
+1. Cree, I. A., Uttley, L., Buckley Woods, H., Kikuchi, H., Reiman, A., Harnan, S., 
+Whiteman, B. L., Philips, S. T., Messenger, M., Cox, A., Teare, D., Sheils, O., Shaw, J., 
+& UK Early Cancer Detection Consortium (2017). The evidence base for circulating 
+tumour DNA blood-based biomarkers for the early detection of cancer: a systematic 
+mapping review. BMC cancer, 17(1), 697. https://doi.org/10.1186/s12885-017-3693-7
+2. Lo, Y. M. D., Han, D. S. C., Jiang, P., & Chiu, R. W. K. (2021). Epigenetics, 
+fragmentomics, and topology of cell-free DNA in liquid biopsies. Science (American 
+Association for the Advancement of Science), 372(6538), 144–. 
+https://doi.org/10.1126/science.aaw3616
+3. Anna-Lisa Doebley, Minjeong Ko, Hanna Liao, A. Eden Cruikshank, Caroline Kikawa, 
+Katheryn Santos, Joseph Hiatt, Robert D. Patton, Navonil De Sarkar, Anna C.H. Hoge, 
+Katharine Chen, Zachary T. Weber, Mohamed Adil, Jonathan Reichel, Paz Polak, Viktor 
+A. Adalsteinsson, Peter S. Nelson, Heather A. Parsons, Daniel G. Stover, David 
+MacPherson, Gavin Ha.(2021) Griffin: Framework for clinical cancer subtyping from 
+nucleosome profiling of cell-free DNA, medRxiv 2021.08.31.21262867; doi: 
+https://doi.org/10.1101/2021.08.31.21262867
+4. Katsman, E., Orlanski, S., Martignano, F., Fox-Fisher, I., Shemer, R., Dor, Y., Zick, A., 
+Eden, A., Petrini, I., Conticello, S. G., & Berman, B. P. (2022). Detecting cell-of-origin 
+and cancer-specific methylation features of cell-free DNA from Nanopore sequencing. 
+Genome biology, 23(1), 158. https://doi.org.myaccess.library.utoronto.ca/10.1186/s13059-022-02710-1
+5. Cristiano, S., Leal, A., Phallen, J., Fiksel, J., Adleff, V., Bruhm, D. C., Jensen, S. Ø., 
+Medina, J. E., Hruban, C., White, J. R., Palsgrove, D. N., Niknafs, N., Anagnostou, V., 
+Forde, P., Naidoo, J., Marrone, K., Brahmer, J., Woodward, B. D., Husain, H., van 
+Rooijen, K. L., … Velculescu, V. E. (2019). Genome-wide cell-free DNA fragmentation 
+in patients with cancer. Nature, 570(7761), 385–389. https://doi.org.myaccess.library.utoronto.ca/10.1038/s41586-019-1272-6
+6. Wang H (2022). cfDNAPro: cfDNAPro Helps Characterise and Visualise Whole Genome 
+Sequencing Data from Liquid Biopsy. R package version 
+1.2.0, https://github.com/hw538/cfDNAPro.
+7. Alkodsi A, Meriranta L, Pasanen A, Leppä S (2020). “ctDNAtools: An R package to 
+work with sequencing data of circulating tumor DNA.” bioRxiv.
+8. Puranachot P (2022). cfdnakit : an R package for fragmentation analysis of cfDNA and 
+copy-number alteration calling. R package version 0.0.1, https://github.com/Pitithat.pu/cfdnakit.
+9. Morgan M, Pagès H, Obenchain V, Hayden N (2022). Rsamtools: Binary alignment 
+(BAM), FASTA, variant call (BCF), and tabix file import. R package version 
+2.12.0, https://bioconductor.org/packages/Rsamtools.
+10. Lawrence M, Huber W, Pagès H, Aboyoun P, Carlson M, Gentleman R, Morgan M, 
+Carey V (2013). “Software for Computing and Annotating Genomic Ranges.” PLoS 
+Computational Biology, 9. 
+doi: 10.1371/journal.pcbi.1003118, http://www.ploscompbiol.org/article/info%3Adoi%2
+F10.1371%2Fjournal.pcbi.1003118.
+11. Wickham H (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New 
+York. ISBN 978-3-319-24277-4, https://ggplot2.tidyverse.org.
+
+
+
+
+----
+
+```{r}
+sessionInfo()
+```
