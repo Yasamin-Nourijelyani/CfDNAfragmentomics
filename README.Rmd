@@ -65,7 +65,7 @@ and `Running under: Windows 10 x64 (build 22000)`.
 To install the latest version of the package:
 ``` r
 require("devtools")
-devtools::install_github("Yasamin-Nourijelyani/CfDNAfragmentomics", build_vignettes = TRUE)
+devtools::install_github("Yasamin-Nourijelyani/CfDNAfragmentomics")
 library("CfDNAfragmentomics")
 ```
 To run the shinyApp:
@@ -79,7 +79,10 @@ runShinyCfDNAfragmentomics()
 ``` r
 ls("package:CfDNAfragmentomics")
 data(package = "CfDNAfragmentomics") 
-browseVignettes("CfDNAfragmentomics")
+```
+Run help for functions like the command below:
+```r
+?nucleosomeRatio
 ```
 
 - Analysis function:
