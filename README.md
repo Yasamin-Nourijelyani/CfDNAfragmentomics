@@ -28,35 +28,33 @@ analyse sequenced data from inputted data files and find their
 nucleosome ratios and fragmentation patterns. To further the research
 done by Katsman et. al. and others in the field, t-test analysis can be
 performed to compare the significance of the difference in the
-nucleosome ratios between the patient and control data. T-Test analysis
-is a parametric test used to compare the fragment lengths of control and
-patient cfDNA, to make inferences about the state of the population of
-cfDNA molecules in the patient (15). This analysis is used to predict if
-the patient has the cfDNA fragment length cancer biomarker or not, and
-predict if the patient is cancer positive or negative given this
-biomarker. Evidently, the patient and control data need to be provided
-in such manner that the DNA reads are specific for the region
-corresponding to the cancer type of interest to avoid the presence of
-noise in the analysis. Additionally, to perform the t-test, it is
-required for the researcher to have a null hypothesis with a p-value
-which is considered significant such that if the dinucleosome or
-mononucleosome cfDNA lengths are shorter in the patient data as compared
-to the the control, that p-value will be used to determine if the
-difference in length is significant. This way, it would be possible to
-deterimine, given the p-value, if a sample patient dataset is
-potentially cancerous, with a higher certainty. Using this analysed
-data, graphs can be generated for visualization, and statistical tests
-can be performed to determine if the sample cfDNA analysed is cancerous.
-This package is novel since there are no other packages that perform
-statistical analysis on patient and control cfDNA to find the likelihood
-of cancer in the patient cfDNA. <br> The biological data analysed by
-cfDNAfragmentomics is cfDNA (cell-free DNA) which are short DNA
-fragments that have entered the blood due to cell apoptosis or necrosis.
-This DNA can have variable lengths in the range of 150-400 base pairs
-(3). These DNA fragments are sequenced using Illumina Sequencing or
-Oxford Nanopore Technology. The DNA sequences are available in .bed or
-.txt files, with format as discussed in the assumptions, as inputs to
-the cfDNAfragmentomics package. <br>
+nucleosome ratios between the patient and control data. Additionally,
+this package contains python scripts to plot nucleosome coverage plots
+and also perform fragmentation analysis on larger datasets. The Wilcoxon
+rank sum test, also known as the Mann-Whitney U test, is a
+non-parametric test used to determine significance of the difference in
+fragment size of the control and patient cfDNA lengths to determine if
+the patient data contains the cancer biomarker. Here, we are comparing
+two independent samples, which are the population of healthy control
+cfDNA data and population of patient cfDNA data, and we are making
+inference about the state of being cancer positive or negative of the
+population of cfDNA molecules in the patient as being potentially cancer
+positive or negative. Both control and patient data inputted to the
+functions are assumed to be reads for the specific loci corresponding to
+the cancer type of interest. Hence, both the control and patient data
+are required in the analysis to ensure the loci being analysed are
+corresponding to the specific cancer type of interest. This package is
+novel since there are no other R packages that perform statistical
+analysis on patient and control cfDNA to find the likelihood of cancer
+in the patient cfDNA with an R Shiny interface as well as python scripts
+to perform command line functions that require more memory. <br> The
+biological data analysed by cfDNAfragmentomics is cfDNA (cell-free DNA)
+which are short DNA fragments that have entered the blood due to cell
+apoptosis or necrosis. This DNA can have variable lengths in the range
+of 150-400 base pairs (3). These DNA fragments are sequenced using
+Illumina Sequencing or Oxford Nanopore Technology. The DNA sequences are
+available in .bed or .txt files, with format as discussed in the
+assumptions, as inputs to the cfDNAfragmentomics package. <br>
 
 The `CfDNAfragmentomics` package was developed using
 `R version 4.2.2 (2022-10-31 ucrt)`,
@@ -69,7 +67,7 @@ To install the latest version of the package:
 
 ``` r
 require("devtools")
-devtools::install_github("Yasamin-Nourijelyani/CfDNAfragmentomics", build_vignettes = TRUE)
+devtools::install_github("Yasamin-Nourijelyani/CfDNAfragmentomics")
 library("CfDNAfragmentomics")
 ```
 
@@ -84,19 +82,24 @@ runShinyCfDNAfragmentomics()
 ``` r
 ls("package:CfDNAfragmentomics")
 data(package = "CfDNAfragmentomics") 
-browseVignettes("CfDNAfragmentomics")
+```
+
+Run help for functions like the command below:
+
+``` r
+?nucleosomeRatio
 ```
 
 - Analysis function: *nucleosomeRatio*: Fragmentation sizes of cfDNA
   molecules are potential cancer biomarkers (4). Hence, to find if a
   patient data file contains cancer information, it can be compared with
-  a control dataset with known healthy cfDNA fragments. The t-test is a
-  parametric test used to determine significance of the difference in
-  fragment size of the control and patient cfDNA lengths to determine if
-  the patient data contains the cancer biomarker. Here, we are comparing
-  two independent samples, which are the control and patient data, and
-  we are making inference about the state (cancer positive or negative)
-  of the population of cfDNA molecules in the patient as being
+  a control dataset with known healthy cfDNA fragments. The U-test is a
+  non-parametric test used to determine significance of the difference
+  in fragment size of the control and patient cfDNA lengths to determine
+  if the patient data contains the cancer biomarker. Here, we are
+  comparing two independent samples, which are the control and patient
+  data, and we are making inference about the state (cancer positive or
+  negative) of the population of cfDNA molecules in the patient as being
   potentially cancer positive or negative. This function takes as input
   cfDNA read dataframes from patient and controls, which can be read
   from .bed or .txt files. This function also takes as input, p-values
@@ -112,14 +115,16 @@ browseVignettes("CfDNAfragmentomics")
   cancerous will be TRUE. and cancerous will be FALSE otherwise. Note
   that even if the p-values show significance, if the patient cfDNA
   lengths are not shorter, then the patient is not considered as being
-  cancerous.
+  cancerous. *nuc_ratio.py* Perform U-test on sample and control bed
+  files.
 
-- Plotting function: *nucleosomeDensityPlot*: A visualization function
+- Plotting functions: *nucleosomeDensityPlot*: A visualization function
   that generates a density plot showing nucleosome fragment lengths for
   control and patient data to visually compare the mono-nucleosome and
   di-nucleosome fragment length densities. This function takes as input
   cfDNA read dataframes from patient and controls, which can be read
-  from .bed or .txt files.
+  from .bed or .txt files. *nucleosome_occupancy.py*: Plot nucleosome
+  coverage plots
 
 Assumptions:  
 
@@ -139,27 +144,16 @@ Assumptions:
     100-400 base pairs to avoid using a large memory space and to ensure
     only short cfDNA fragments are analysed  
 
-4.  The t-test is a parametric test used to determine significance of
-    the difference in fragment size of the control and patient cfDNA
-    lengths to determine if the patient data contains the cancer
-    biomarker. performing a parametric t-test assumes that the data is
-    normally distributed (15). However, this may not always be assumed
-    for real, patient data. Yet, in this analysis, this test will be
-    performed, with the assumption that the data is normally
-    distributed.  
-
-5.  It is also assumed that the data is real human data and contains
+4.  It is also assumed that the data is real human data and contains
     both mono-nucleosome and di-nucleosome length data, sequenced from
     Illumina and Oxford Nanopore Technology sequencers to ensure data
     viability.  
 
-6.  Both control and patient data inputted to the functions are assumed
+5.  Both control and patient data inputted to the functions are assumed
     to be reads for the specific loci corresponding to the cancer type
     of interest. Hence, both the control and patient data are required
     in the analysis to ensure the loci being analysed are corresponding
     to the specific cancer type of interest.  
-
-![](./inst/extdata/NOURI_Y_A1.png)
 
 ## Contributions
 
@@ -167,20 +161,21 @@ The author of the package is Yasamin Nouri Jelyani.
 
 The *nucleosomeRatio* function, written by the author makes use of
 `dplyr` to select rows from the data frame that corresponds to
-mono-nucleosome or di-nucleosome sizes. Using the `stats` *t.test*
-function, it calculates the t-test for the patient versus the control
-cfDNA sizes. This is used to evaluate mono-nucleosome and di-nucleosome
-cfDNA lengths differences, and are used to determine the significance of
-the difference to determine if the patient data can be categorized as
-cancerous cfDNA. The *nucleosomeDensityPlot* function written by the
-author makes use of the `ggplot` R package to plot the size distribution
-of the cfDNA for patient and control data.
-
-This package contains significant contributions by Dr.Jared Simpson and
+mono-nucleosome or di-nucleosome sizes. Using the `stats` *wilcox.test*
+function, it calculates the wilcox-test for the patient versus the
+control cfDNA sizes. This is used to evaluate mono-nucleosome and
+di-nucleosome cfDNA lengths differences, and are used to determine the
+significance of the difference to determine if the patient data can be
+categorized as cancerous cfDNA. The *nucleosomeDensityPlot* function
+written by the author makes use of the `ggplot` R package to plot the
+size distribution of the cfDNA for patient and control data. The python
+script *nucleosome_occupancy.py* is written by Jonathan Broadbent. This
+package contains significant contributions by Dr.Jared Simpson and
 Jonathan Broadbent, who are the supervisors of this package development.
 Contributions include: suggestion about using non-parametric tests
 instead of parametric. Also, nucleosome coverage plot idea of algorithm
-is from Jonathan Broadbent.
+is from Jonathan Broadbent. The python script *nuc_ratio.py* and *p.py*
+are written by the author.
 
 ## References
 
@@ -262,19 +257,13 @@ is from Jonathan Broadbent.
 14. Canva (2022). Image created by Nouri Jelyani, Y. Retrieved Novembre
     14, 2022, from <https://www.canva.com/>
 
-15. “The T-Test.” JMP,
-    <https://www.jmp.com/en_ca/statistics-knowledge-portal/t-test.html#>:\~
-    :text=t%2DTest%20assumptions&text=The%20data%20are%20continuous.,
-    The%20distribution%20is%20approximately%20normal.
-
 ## Acknowledgements
 
 This package was developed by Yasamin Nouri Jelyani for BCB430: Research
 Course under the supervision of Professor Jared Simpson and Jonathan
-Broadbent. The package backbone was originally developed as part of the
-BCB420 course (Fall 2022) Taught by Professor Anjali Silva. at the
-University of Toronto, Toronto, CANADA. `CfDNAfragmentomics` welcomes
-issues, enhancement requests, and other contributions. To submit an
-issue, use the [GitHub
+Broadbent. Using teachings of Professor Anjali Silva. at the University
+of Toronto, Toronto, CANADA. `CfDNAfragmentomics` welcomes issues,
+enhancement requests, and other contributions. To submit an issue, use
+the [GitHub
 issues](https://github.com/Yasamin-Nourijelyani/CfDNAfragmentomics/issues).
 Many thanks to those who provided feedback to improve this package.
