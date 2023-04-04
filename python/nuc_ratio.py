@@ -60,17 +60,39 @@ def nucleosome_ratio(controls_bed, sample_bed):
 
     statistic_di, pvalue_di = stats.ranksums(lengths_control_di, lengths_sample_di)
 
+    # the mean of the control samples for mono-num
+    mean_mono_c = sum(lengths_control_mono)/len(lengths_control_mono)
+
+     # the mean of the control samples for mono-num
+    mean_di_c = sum(lengths_control_di)/len(lengths_control_di)
+
+        # the mean of the control samples for mono-num
+    mean_mono_s = sum(lengths_sample_mono)/len(lengths_sample_mono)
+
+        # the mean of the control samples for mono-num
+    mean_di_s = sum(lengths_sample_di)/len(lengths_sample_di)
+
+    # are the lengths of control mono-nuc greater than sample mono-nuc?
+    if mean_mono_c >= mean_mono_s:
+        print("length of mono-nuc is greater in the control compared to sample - if significantly differnt, this indicates cancer")
+    else:
+        print("length of mono-nuc is smaller in the control compared to sample")
+
+    if mean_di_c >= mean_di_s:
+        print("length of di-nuc is greater in the control compared to sample - if significantly differnt, this indicates cancer")
+    else:
+        print("length of mono-nuc is smaller in the control compared to sample")
 
 
 
     # print the resulting DataFrame
-    print(statistic_mono)
+    print(f"The mononucleosome Wilcox statistic: {statistic_mono}")
 
-    print(pvalue_mono)
+    print(f"The mononucleosome Wilcox p-value: {pvalue_mono}")
 
-    print(statistic_di)
+    print(f"The dinucleosome Wilcox statistic: {statistic_di}")
 
-    print(pvalue_di)
+    print(f"The dinucleosome Wilcox p-value:{pvalue_di}")
 
 
 def main():
