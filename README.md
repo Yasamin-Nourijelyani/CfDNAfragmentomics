@@ -89,7 +89,7 @@ Run help for functions like the command below:
 ?nucleosomeRatio
 ```
 
-- Analysis function: *nucleosomeRatio*: Fragmentation sizes of cfDNA
+- R Analysis function: *nucleosomeRatio*: Fragmentation sizes of cfDNA
   molecules are potential cancer biomarkers (4). Hence, to find if a
   patient data file contains cancer information, it can be compared with
   a control dataset with known healthy cfDNA fragments. The U-test is a
@@ -114,16 +114,18 @@ Run help for functions like the command below:
   cancerous will be TRUE. and cancerous will be FALSE otherwise. Note
   that even if the p-values show significance, if the patient cfDNA
   lengths are not shorter, then the patient is not considered as being
-  cancerous. *nuc_ratio.py* Perform U-test on sample and control bed
-  files.
-
-- Plotting functions: *nucleosomeDensityPlot*: A visualization function
+  cancerous. 
+ - *nuc_ratio.py* In the nuc_ratio.py file, the function nucleosome_ratio takes as input a sample cfDNA file and a healthy control bed file to compare the mono-nucleosome and dinucleosome fragment lengths. Using the patient and healthy bed files, we find the cfDNA fragment lengths, and seperate them into mononucleosome and dinucleosome arrays based on their lengths. Then, The sample and control mononucleosome lengths and the sample and control dinucleosome lengths are compared using the wilcoxon rank sum test.
+  
+ - *nucleosome_occupancy.py* : We designed a python script to aggregate fragment coverage along different areas of the genome. The script takes as input a bed file containing cfDNA start and end intervals and also a set of transcription factor binding site loci. We run through every TFBS and using the midpoint region, we aggregate the fragment coverage in a window size. The size of the window is specified by the user as an argument (i.e. 1000bp). Then, we use the aggregated coverage vector to plot the coverage of the nucleosome occupancy in a line plot.
+ The plot is smoothed using a Savitzky-Golay filter.
+ 
+- R Plotting functions: *nucleosomeDensityPlot*: A visualization function
   that generates a density plot showing nucleosome fragment lengths for
   control and patient data to visually compare the mono-nucleosome and
   di-nucleosome fragment length densities. This function takes as input
   cfDNA read dataframes from patient and controls, which can be read
-  from .bed or .txt files. *nucleosome_occupancy.py*: Plot nucleosome
-  coverage plots
+  from .bed or .txt files.
 
 The fragmentation length analysis on the python script can be performed using the command line code:
 ``` r
