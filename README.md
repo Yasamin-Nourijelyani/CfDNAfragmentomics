@@ -267,8 +267,6 @@ are written by the author.
 13. Wickham, H. and Bryan, J. (2019). R Packages (2nd edition). Newton,
     Massachusetts: O’Reilly Media. <https://r-pkgs.org/>
 
-14. Canva (2022). Image created by Nouri Jelyani, Y. Retrieved Novembre
-    14, 2022, from <https://www.canva.com/>
 
 ## Acknowledgements
 
