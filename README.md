@@ -169,7 +169,8 @@ significance of the difference to determine if the patient data can be
 categorized as cancerous cfDNA. The *nucleosomeDensityPlot* function
 written by the author makes use of the `ggplot` R package to plot the
 size distribution of the cfDNA for patient and control data. The python
-script *nucleosome_occupancy.py* is written by Jonathan Broadbent. This
+script *nucleosome_occupancy.py* is written with significant contribution 
+from Jonathan Broadbent. This
 package contains significant contributions by Dr.Jared Simpson and
 Jonathan Broadbent, who are the supervisors of this package development.
 Contributions include: suggestion about using non-parametric tests
