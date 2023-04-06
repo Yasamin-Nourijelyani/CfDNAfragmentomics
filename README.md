@@ -81,7 +81,6 @@ runShinyCfDNAfragmentomics()
 
 ``` r
 ls("package:CfDNAfragmentomics")
-data(package = "CfDNAfragmentomics") 
 ```
 
 Run help for functions like the command below:
