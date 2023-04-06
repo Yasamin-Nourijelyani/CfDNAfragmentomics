@@ -154,6 +154,17 @@ Assumptions:
     in the analysis to ensure the loci being analysed are corresponding
     to the specific cancer type of interest.  
 
+The fragmentation length analysis on the python script can be performed using the command line code:
+``` r
+python <./location/nuc_ratio.py> <control_data.tsv> -s <sample_data.tsv>
+```
+
+The Nucleosome Occupancy analysis on the python script can be performed using the command line code:
+
+``` r
+python <./location/nucleosome_occupancy.py> -t <./location/TFBS_loc.tsv> 
+    -w <Window size> -n <name> <./locationdata/gene.hg38.frag.bed>
+```
 ## Contributions
 
 The author of the package is Yasamin Nouri Jelyani.
