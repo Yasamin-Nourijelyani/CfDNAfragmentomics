@@ -3,7 +3,7 @@
 
 # CfDNAfragmentomics
 
-Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping
+Fragmentomic Analysis of cfDNA for Cancer Detection and Subtyping.
 
 <!-- badges: start -->
 <!-- https://www.codefactor.io/repository/github/anjalisilva/testingpackage/issues -->
