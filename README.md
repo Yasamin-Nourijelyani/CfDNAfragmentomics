@@ -26,7 +26,7 @@ mono-nucleosome and di-nucleosome cfDNA as compared to normal cfDNA in
 cancer patients (5). The objective of cfDNAfragmentomics R package is to
 analyse sequenced data from inputted data files and find their
 nucleosome ratios and fragmentation patterns. To further the research
-done by Katsman et. al. and others in the field, Wolcoxon test analysis can be
+done by Katsman et. al. and others in the field, Wilcoxon test analysis can be
 performed to compare the significance of the difference in the
 nucleosome ratios between the patient and control data. Additionally,
 this package contains python scripts to plot nucleosome coverage plots
