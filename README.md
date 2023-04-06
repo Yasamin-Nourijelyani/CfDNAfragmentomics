@@ -102,7 +102,7 @@ Run help for functions like the command below:
   potentially cancer positive or negative. This function takes as input
   cfDNA read dataframes from patient and controls, which can be read
   from .bed or .txt files. This function also takes as input, p-values
-  for the t-test analysis of mononucleosomes and dinucleosomes. The
+  for the U-test analysis of mononucleosomes and dinucleosomes. The
   function returns a list of outputs. This list contains a real number:
   ttest_mono_pvalue, a real number: ttest_di_pvalue, and a boolean
   value: cancerous. ttest_mono_pvalue is the p-value calculated for the
