@@ -25,7 +25,7 @@ discovered in the paper by Katsman et. al. is the higher ratio of short
 mono-nucleosome and di-nucleosome cfDNA as compared to normal cfDNA in
 cancer patients (5). The objective of cfDNAfragmentomics R package is to
 analyse sequenced data from inputted data files and find their
-nucleosome ratios and fragmentation patterns. To further the research
+nucleosome ratios and fragmentation patterns and classify the cfDNAs into cancerous or not using a decision tree model. The model evaluates the information gain criteria using entropy loss function. To further the research
 done by Katsman et. al. and others in the field, Wilcoxon test analysis can be
 performed to compare the significance of the difference in the
 nucleosome ratios between the patient and control data. Additionally,
